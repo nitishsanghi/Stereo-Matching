@@ -2,7 +2,7 @@
 
 ## Overview
 The `StereoBlockMatching` class is a custom implementation of the stereo block matching algorithm for computing disparity maps from stereo image pairs. Unlike leveraging high-level OpenCV stereo matching functions like `StereoBM` or `StereoSGBM`, this class provides a hands-on approach to understanding and customizing stereo matching at a fundamental level. 
-
+![alt text](https://github.com/nitishsanghi/Stereo-Matching/blob/main/000000_10.png)
 ![alt text](https://github.com/nitishsanghi/Stereo-Matching/blob/main/Disparity.png)
 
 ## Features
