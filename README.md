@@ -70,9 +70,6 @@ Contributions to improve the algorithm or extend its functionality are welcome. 
 ## Performance Considerations
 While focusing on clarity, this manual implementation may not match the performance of optimized OpenCV functions. Consider parallel processing or algorithmic optimizations for real-time applications.
 
-## License
-This project is open-sourced under the MIT License. See the LICENSE file for details.
-
 ---
 
 This write-up, enriched with equations, provides a comprehensive guide to using and understanding the `StereoBlockMatching` class, making it accessible for educational purposes and practical applications in stereo vision projects.
