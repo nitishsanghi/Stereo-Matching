@@ -94,7 +94,7 @@ void StereoBlockMatching::computeDisparityMap(cv::Mat& ref_image, cv::Mat& targe
             // Slide the window across the target image and calculate the Sum of Squared Differences (SSD).
             switch(metric){
                 case SAD:
-                        break;
+                    break;
                 case ZSAD:
                     ref_window_mean = ref_window - mean(ref_window);
                     break;
