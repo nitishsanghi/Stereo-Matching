@@ -53,16 +53,16 @@ cv::waitKey(0);
  $\text{SAD}(I_1, I_2) = \sum_{x, y} |(I_1(x, y)) - (I_2(x, y)|$
 
 ### Zero-mean Sum of Absolute Differences (ZSAD)
-\[ \text{ZSAD}(I_1, I_2) = \sum_{x, y} |(I_1(x, y) - \mu_{I_1}) - (I_2(x, y) - \mu_{I_2})| \]
+$\text{ZSAD}(I_1, I_2) = \sum_{x, y} |(I_1(x, y) - \mu_{I_1}) - (I_2(x, y) - \mu_{I_2})|$
 
 ### Sum of Squared Differences (SSD)
-\[ \text{SSD}(I_1, I_2) = \sum_{x, y} (I_1(x, y) - I_2(x, y))^2 \]
+$\text{SSD}(I_1, I_2) = \sum_{x, y} (I_1(x, y) - I_2(x, y))^2$
 
 ### Normalized Cross-Correlation (NCC)
-\[ \text{NCC}(I_1, I_2) = \frac{\sum_{x, y} I_1(x, y) \times I_2(x, y)}{\sqrt{\sum_{x, y} I_1(x, y)^2 \times \sum_{x, y} I_2(x, y)^2}} \]
+$\text{NCC}(I_1, I_2) = \frac{\sum_{x, y} I_1(x, y) \times I_2(x, y)}{\sqrt{\sum_{x, y} I_1(x, y)^2 \times \sum_{x, y} I_2(x, y)^2}}$
 
 ### Zero-mean Normalized Cross-Correlation (ZNCC)
-\[ \text{ZNCC}(I_1, I_2) = \frac{\sum_{x, y} (I_1(x, y) - \mu_{I_1}) \times (I_2(x, y) - \mu_{I_2})}{\sqrt{\sum_{x, y} (I_1(x, y) - \mu_{I_1})^2 \times \sum_{x, y} (I_2(x, y) - \mu_{I_2})^2}} \]
+$\text{ZNCC}(I_1, I_2) = \frac{\sum_{x, y} (I_1(x, y) - \mu_{I_1}) \times (I_2(x, y) - \mu_{I_2})}{\sqrt{\sum_{x, y} (I_1(x, y) - \mu_{I_1})^2 \times \sum_{x, y} (I_2(x, y) - \mu_{I_2})^2}}$
 
 ## Contributing
 Contributions to improve the algorithm or extend its functionality are welcome. Open an issue or pull request with your suggestions or improvements.
