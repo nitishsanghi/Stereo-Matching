@@ -50,7 +50,7 @@ cv::waitKey(0);
 ## Disparity Metrics and Equations
 
 ### Sum of Absolute Differences (SAD)
-<img src="https://render.githubusercontent.com/render/math?math=\text{SAD}(I_1, I_2) = \sum_{x, y} |I_1(x, y) - I_2(x, y)|">
+\[ \text{SAD}(I_1, I_2) = \sum_{x, y} |(I_1(x, y)) - (I_2(x, y)| \]
 
 ### Zero-mean Sum of Absolute Differences (ZSAD)
 \[ \text{ZSAD}(I_1, I_2) = \sum_{x, y} |(I_1(x, y) - \mu_{I_1}) - (I_2(x, y) - \mu_{I_2})| \]
