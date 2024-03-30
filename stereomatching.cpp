@@ -21,25 +21,54 @@ int StereoBlockMatching::num_sliding_windows(int n_cols, int col) {
     return num_disparities - std::max(0, (num_disparities - col + padding));
 }
 
-float StereoBlockMatching::disparity_ssd(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff){
-    cv::absdiff(ref_window, target_window, diff);
-    return cv::norm(diff, cv::NORM_L2SQR);
-}
-
 cv::Mat StereoBlockMatching::mean(cv::Mat &window){
     cv::Scalar mean = cv::mean(window);
     cv::Mat mean_mat(window.size(), window.type(), mean);
     return mean_mat;
 }
 
-float StereoBlockMatching::ssd(cv::Mat &window, cv::Mat &window_mean, cv::Mat &diff){
-    cv::absdiff(window, window_mean, diff);
-    return cv::norm(diff, cv::NORM_L2);
+float StereoBlockMatching::ssd(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff){
+    cv::absdiff(ref_window, target_window, diff);
+    return cv::norm(diff, cv::NORM_L2SQR);
 }
 
-float StereoBlockMatching::disparity_sad(cv::Mat &window, cv::Mat &window_mean, cv::Mat &diff){
-    cv::absdiff(window, window_mean, diff);
+float StereoBlockMatching::disparity_sad(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff){
+    cv::absdiff(ref_window, target_window, diff);
     return cv::sum(diff)[0];
+}
+float StereoBlockMatching::disparity_zsad(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff){
+    cv::absdiff(ref_window - mean(ref_window), target_window - mean(target_window), diff);
+    return cv::sum(diff)[0];
+}
+
+float StereoBlockMatching::disparity_ssd(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff){
+    cv::absdiff(ref_window, target_window, diff);
+    return cv::norm(diff, cv::NORM_L2SQR);
+}
+
+float StereoBlockMatching::disparity_ncc(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff){
+    cv::Mat result;
+    cv::multiply(ref_window, target_window, result);
+    cv::Mat denominator_1;
+    cv::multiply(ref_window, ref_window, denominator_1);
+    cv::Mat denominator_2;
+    cv::multiply(target_window, target_window, denominator_2);
+    //cv::Mat zero_mat = cv::Mat::zeros(ref_window.size(), ref_window.type());
+    return cv::sum(result)[0]/(cv::sum(denominator_1)[0]*cv::sum(denominator_2)[0]);
+}
+
+
+float StereoBlockMatching::disparity_zncc(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff){
+    cv::Mat ref_window_mean = ref_window - mean(ref_window);
+    cv::Mat target_window_mean = target_window - mean(target_window);
+    cv::Mat result;
+    cv::multiply(ref_window_mean, target_window_mean, result);
+    cv::Mat denominator_1;
+    cv::multiply(ref_window_mean, ref_window_mean, denominator_1);
+    cv::Mat denominator_2;
+    cv::multiply(target_window_mean, target_window_mean, denominator_2);
+    //cv::Mat zero_mat = cv::Mat::zeros(ref_window.size(), ref_window.type());
+    return cv::sum(result)[0]*cv::sum(result)[0]/(cv::sum(denominator_1)[0]*cv::sum(denominator_2)[0]);
 }
 
 // Compute the disparity map by comparing blocks of the two images and finding the best match.
@@ -73,8 +102,14 @@ void StereoBlockMatching::computeDisparityMap(cv::Mat& ref_image, cv::Mat& targe
                 cv::Mat target_window = target_padded(cv::Rect(col - padding - i, row - padding, block_size, block_size));
                 if (metric == SAD)
                     ssd_values = disparity_sad(ref_window, target_window, diff);
+                if (metric == ZSAD)
+                    ssd_values = disparity_zsad(ref_window, target_window, diff);
                 if (metric == SSD)
                     ssd_values = disparity_ssd(ref_window, target_window, diff);
+                if (metric == NCC)
+                    ssd_values = disparity_ncc(ref_window, target_window, diff);
+                if (metric == ZNCC)
+                    ssd_values = disparity_zncc(ref_window, target_window, diff);
                 
                 if(ssd_values < min_ssd){
                     min_ssd = ssd_values;

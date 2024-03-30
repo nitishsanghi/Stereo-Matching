@@ -11,10 +11,24 @@ int main(){
     StereoBlockMatching sbm;
     sbm.setParameters(100,11,left_image.size());
     cv::Mat disparity_image = cv::Mat::zeros(left_image.size(), CV_32F);
-    
-    sbm.computeDisparityMap(left_image, right_image, disparity_image);
+    sbm.computeDisparityMap(left_image, right_image, disparity_image, StereoBlockMatching::DisparityMetric::SAD);
+    cv::imwrite("Disparity_SAD.png", disparity_image);
 
-    cv::imshow("Disparity", disparity_image);
-    cv::waitKey(0);
+    disparity_image = cv::Mat::zeros(left_image.size(), CV_32F);
+    sbm.computeDisparityMap(left_image, right_image, disparity_image, StereoBlockMatching::DisparityMetric::ZSAD);
+    cv::imwrite("Disparity_ZSAD.png", disparity_image);
+    
+    disparity_image = cv::Mat::zeros(left_image.size(), CV_32F);
+    sbm.computeDisparityMap(left_image, right_image, disparity_image, StereoBlockMatching::DisparityMetric::SSD);
+    cv::imwrite("Disparity_SSD.png", disparity_image);
+    
+    disparity_image = cv::Mat::zeros(left_image.size(), CV_32F);
+    sbm.computeDisparityMap(left_image, right_image, disparity_image, StereoBlockMatching::DisparityMetric::NCC);
+    cv::imwrite("Disparity_NCC.png", disparity_image);
+    
+    disparity_image = cv::Mat::zeros(left_image.size(), CV_32F);
+    sbm.computeDisparityMap(left_image, right_image, disparity_image, StereoBlockMatching::DisparityMetric::ZNCC);
+    cv::imwrite("Disparity_ZNCC.png", disparity_image);
+
     return 0;
 }

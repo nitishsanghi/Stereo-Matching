@@ -17,14 +17,18 @@ class StereoBlockMatching{
             RIGHT,
         };
 
+
+
+    public:
         enum DisparityMetric {
             SAD,
+            ZSAD,
             SSD,
             NCC,
             ZNCC,
         };
 
-    public:
+
         // Default constructor and destructor. They do nothing but are good practice for resource management.
         StereoBlockMatching() = default;
         ~StereoBlockMatching() = default;
@@ -38,13 +42,15 @@ class StereoBlockMatching{
         // Calculate the number of sliding windows based on the image column and other parameters.
         int num_sliding_windows(int n_cols, int col);
 
-        float disparity_ssd(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff);
-
         cv::Mat mean(cv::Mat &window);
 
         float ssd(cv::Mat &window, cv::Mat &window_mean, cv::Mat &diff);
 
-        float disparity_sad(cv::Mat &window, cv::Mat &window_mean, cv::Mat &diff);
+        float disparity_sad(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff);
+        float disparity_zsad(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff);
+        float disparity_ssd(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff);
+        float disparity_ncc(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff);
+        float disparity_zncc(cv::Mat &ref_window, cv::Mat &target_window, cv::Mat &diff);
         
     private:
         // Private member variables to store the block size, number of disparities, padding, the disparity image, and the sliding windows calculations.
@@ -52,7 +58,7 @@ class StereoBlockMatching{
         int num_disparities;
         int padding;
         cv::Mat disparity_image;
-        std::vector<int> sliding_windows;        
+        std::vector<int> sliding_windows;
 };
 
 #endif // STEREOMATCHING_HPP
