@@ -1,57 +1,78 @@
-# StereoBlockMatching Implementation 
+# StereoBlockMatching: A Manual Stereo Matching Implementation
 
-## Overview
-The `StereoBlockMatching` class is a custom implementation of the stereo block matching algorithm for computing disparity maps from stereo image pairs. Unlike leveraging high-level OpenCV stereo matching functions like `StereoBM` or `StereoSGBM`, this class provides a hands-on approach to understanding and customizing stereo matching at a fundamental level. 
+## Introduction
+The `StereoBlockMatching` class is a manual implementation of stereo block matching for computing disparity maps from stereo images. This approach provides a clear understanding of the stereo matching process using basic OpenCV functions, allowing for a customizable and insightful exploration into stereo vision.
 ![alt text](https://github.com/nitishsanghi/Stereo-Matching/blob/main/000000_10.png)
 ![alt text](https://github.com/nitishsanghi/Stereo-Matching/blob/main/Disparity.png)
 
 ## Features
-- **Customizable Block Matching**: Offers flexibility in choosing the disparity metric (SSD, SAD, etc.) for matching.
-- **Manual Implementation**: Utilizes basic OpenCV functions for a clearer understanding of the stereo matching process.
-- **Performance Insights**: Includes timing for disparity map computation, offering insights into the algorithm's performance.
+- **Customizable Disparity Metrics**: The implementation supports various methods for calculating disparity, such as Sum of Absolute Differences (SAD), Zero-mean Sum of Absolute Differences (ZSAD), Sum of Squared Differences (SSD), Normalized Cross-Correlation (NCC), and Zero-mean Normalized Cross-Correlation (ZNCC).
+- **Manual Implementation**: Leverages fundamental OpenCV functions to illustrate the stereo matching algorithm's core principles.
+- **Performance Insights**: Includes timing for the disparity computation to analyze and optimize performance.
 
 ## Dependencies
-- OpenCV 4.x
+- [OpenCV](https://opencv.org/) (4.x recommended)
 - C++11 or later
+
+## Installation
+Ensure OpenCV is installed and configured in your C++ development environment. Clone the repository or copy the `StereoBlockMatching.hpp` file into your project directory.
 
 ## Usage
 
-### Setting Parameters
-Before computing the disparity map, set the required parameters: the number of disparities to consider, the block size for matching, and the size of the images being processed.
+### Initialization
+Instantiate the `StereoBlockMatching` object and set the stereo matching parameters.
 
 ```cpp
 StereoBlockMatching sbm;
-sbm.setParameters(64, 9, cv::Size(640, 480)); // Example parameters
+sbm.setParameters(60, 9, cv::Size(640, 480)); // Parameters: num_disparities, block_size, image_size
 ```
 
-### Computing the Disparity Map
-Choose a disparity metric and compute the disparity map by providing left and right stereo images. The result is stored in a `cv::Mat`.
+### Compute the Disparity Map
+Select the disparity metric and compute the disparity map using left and right stereo images.
 
 ```cpp
 cv::Mat leftImage = cv::imread("left.jpg", cv::IMREAD_GRAYSCALE);
 cv::Mat rightImage = cv::imread("right.jpg", cv::IMREAD_GRAYSCALE);
 cv::Mat disparityMap;
 
-sbm.computeDisparityMap(leftImage, rightImage, disparityMap, StereoBlockMatching::SSD);
+sbm.computeDisparityMap(leftImage, rightImage, disparityMap, StereoBlockMatching::SSD); // Using SSD as the metric
 ```
 
-### Disparity Metrics
-The class supports various disparity metrics, selectable when calling `computeDisparityMap`:
-- `SSD`: Sum of Squared Differences
-- `SAD`: Sum of Absolute Differences
-- `NCC`: Normalized Cross-Correlation (planned)
-- `ZNCC`: Zero-Mean Normalized Cross-Correlation (planned)
+### Visualization
+Normalize and display the computed disparity map for visualization.
 
-Currently, SSD and SAD are implemented, with plans to add support for correlation-based metrics.
+```cpp
+cv::normalize(disparityMap, disparityMap, 0, 255, cv::NORM_MINMAX, CV_8U);
+cv::imshow("Disparity Map", disparityMap);
+cv::waitKey(0);
+```
 
-## Implementation Details
-The class defines basic stereo matching operations such as SSD computation, with a straightforward approach to sliding window management and disparity calculation. The choice of metric influences the matching process, enabling a comparison of different matching strategies' effectiveness.
+## Disparity Metrics and Equations
 
-### Extensibility
-The architecture allows for easy extension with new disparity metrics or optimizations like parallel processing for performance improvements.
+### Sum of Absolute Differences (SAD)
+\[ \text{SAD}(I_1, I_2) = \sum_{x, y} |I_1(x, y) - I_2(x, y)| \]
 
-### Performance and Optimization
-The manual implementation provides a clear understanding of the stereo matching process but may not match the performance of optimized OpenCV functions out-of-the-box. Profiling and optimization, such as using SIMD instructions or multi-threading, can enhance performance for real-time applications.
+### Zero-mean Sum of Absolute Differences (ZSAD)
+\[ \text{ZSAD}(I_1, I_2) = \sum_{x, y} |(I_1(x, y) - \mu_{I_1}) - (I_2(x, y) - \mu_{I_2})| \]
 
-## Conclusion
-`StereoBlockMatching` is a valuable educational tool for exploring stereo vision fundamentals. It offers a customizable platform for experimenting with different matching strategies and optimizations in stereo vision applications.
+### Sum of Squared Differences (SSD)
+\[ \text{SSD}(I_1, I_2) = \sum_{x, y} (I_1(x, y) - I_2(x, y))^2 \]
+
+### Normalized Cross-Correlation (NCC)
+\[ \text{NCC}(I_1, I_2) = \frac{\sum_{x, y} I_1(x, y) \times I_2(x, y)}{\sqrt{\sum_{x, y} I_1(x, y)^2 \times \sum_{x, y} I_2(x, y)^2}} \]
+
+### Zero-mean Normalized Cross-Correlation (ZNCC)
+\[ \text{ZNCC}(I_1, I_2) = \frac{\sum_{x, y} (I_1(x, y) - \mu_{I_1}) \times (I_2(x, y) - \mu_{I_2})}{\sqrt{\sum_{x, y} (I_1(x, y) - \mu_{I_1})^2 \times \sum_{x, y} (I_2(x, y) - \mu_{I_2})^2}} \]
+
+## Contributing
+Contributions to improve the algorithm or extend its functionality are welcome. Open an issue or pull request with your suggestions or improvements.
+
+## Performance Considerations
+While focusing on clarity, this manual implementation may not match the performance of optimized OpenCV functions. Consider parallel processing or algorithmic optimizations for real-time applications.
+
+## License
+This project is open-sourced under the MIT License. See the LICENSE file for details.
+
+---
+
+This write-up, enriched with equations, provides a comprehensive guide to using and understanding the `StereoBlockMatching` class, making it accessible for educational purposes and practical applications in stereo vision projects.
